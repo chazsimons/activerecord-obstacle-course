@@ -49,9 +49,9 @@ describe 'ActiveRecord Obstacle Course, Week 4' do
     # -----------------------------------------------------------
 
     # ------------------ Improved Solution ----------------------
-    orders = OrderItem.select(:order_id).where(item_id: @item_4.id)
+    # orders = OrderItem.select(:order_id).where(item_id: @item_4.id)
 
-    require "pry"; binding.pry
+    orders = Order.joins(:items).where(order_items: {item_id: @item_4.id})
     # -----------------------------------------------------------
 
     # Expectation
@@ -62,13 +62,13 @@ describe 'ActiveRecord Obstacle Course, Week 4' do
     expected_result = [@order_11, @order_5]
 
     # ------------------ Inefficient Solution -------------------
-    orders = Order.where(user: @user_2)
-    order_ids = OrderItem.where(order_id: orders, item: @item_4).map(&:order_id)
-    orders = order_ids.map { |id| Order.find(id) }
+    # orders = Order.where(user: @user_2)
+    # order_ids = OrderItem.where(order_id: orders, item: @item_4).map(&:order_id)
+    # orders = order_ids.map { |id| Order.find(id) }
     # -----------------------------------------------------------
 
     # ------------------ Improved Solution ----------------------
-    #  Solution goes here
+    orders = Order.where(user_id: @user_2.id).joins(:items).where(order_items: {item_id: @item_4.id})
     # -----------------------------------------------------------
 
     # Expectation
@@ -90,7 +90,7 @@ describe 'ActiveRecord Obstacle Course, Week 4' do
     # ------------------------------------------------------------
 
     # ------------------ ActiveRecord Solution ----------------------
-    # Solution goes here
+    ordered_items = Item.joins(:order_items).distinct
     # ---------------------------------------------------------------
 
     # Expectations
